@@ -1,7 +1,15 @@
 from Bio import Phylo
 from Bio.Phylo.Consensus import *
+from Bio.Nexus import Trees
 import tree_utils
 import click
+from Bio.Phylo.TreeConstruction import DistanceCalculator
+from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+from Bio import AlignIO
+import dendropy
+from dendropy import treecalc
+from Bio.PDB import *
+import sys
 
 
 @click.group()
@@ -57,6 +65,44 @@ def consensus(file_path, file_format, algorithm, majority_cutoff, output_file):
     if output_file is not None:
         Phylo.write(consensus_tree, output_file, file_format)
 
+
+@cli.command()
+@click.option('-i', '--file-path', help='File with phylo trees to parse')
+@click.option('-f', '--file-format', help='Phylo tree file format', default='newick')
+@click.option('-i2', '--file-path2', help='File with phylo trees to parse')
+def nearest(file_path, file_format, file_path2):
+    # Read the sequences and align
+    aln = AlignIO.read(file_path, file_format)
+
+    # Print the alignment
+    print(aln)
+
+    # Calculate the distance matrix
+    calculator = DistanceCalculator('identity')
+    dm = calculator.get_distance(aln)
+
+    # Print the distance Matrix
+    print('\nDistance Matrix\n===================')
+    print(dm)
+
+    # Construct the phylogenetic tree using UPGMA algorithm
+    constructor = DistanceTreeConstructor()
+    tree = constructor.upgma(dm)
+
+    # Draw the phylogenetic tree
+    Phylo.draw(tree)
+
+    # Print the phylogenetic tree in the terminal
+    print('\nPhylogenetic Tree\n===================')
+    Phylo.draw_ascii(tree)
+
+
+@cli.command()
+@click.option('-i', '--file-path', help='File with phylo trees to parse')
+@click.option('-f', '--file-format', help='Phylo tree file format', default='newick')
+@click.option('-i2', '--file-path2', help='File with phylo trees to parse')
+def distance(file_path, file_format, file_path2):
+    print("jeszcze nic")
 
 if __name__ == '__main__':
     cli()
