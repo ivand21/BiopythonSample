@@ -40,7 +40,7 @@ def get_min_depth(depths):
 
 
 def show_info(tree):
-    non_terminals_count = len(tree.get_terminals())
+    non_terminals_count = len(tree.get_nonterminals())
     terminal_count = tree.count_terminals()
     depths = tree.depths()
     if tree.name is not None:
