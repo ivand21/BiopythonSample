@@ -70,34 +70,17 @@ def consensus(file_path, file_format, algorithm, majority_cutoff, output_file):
 @cli.command()
 @click.option('-i', '--file-path', help='File with phylo trees to parse')
 @click.option('-f', '--file-format', help='Phylo tree file format', default='newick')
-@click.option('-i2', '--file-path2', help='File with phylo trees to parse')
-def nearest(file_path, file_format, file_path2):
-    # Read the sequences and align
-    aln = AlignIO.read(file_path, file_format)
-
-    # Print the alignment
-    print(aln)
-
-    # Calculate the distance matrix
-    calculator = DistanceCalculator('identity')
-    dm = calculator.get_distance(aln)
-
-    # Print the distance Matrix
-    print('\nDistance Matrix\n===================')
-    print(dm)
-
-    # Construct the phylogenetic tree using UPGMA algorithm
-    constructor = DistanceTreeConstructor()
-    tree = constructor.upgma(dm)
-
-    # Draw the phylogenetic tree
-    Phylo.draw(tree)
-
-    # Print the phylogenetic tree in the terminal
-    print('\nPhylogenetic Tree\n===================')
-    Phylo.draw_ascii(tree)
-
-
+@click.option('-n1', '--node1', help='First node')
+@click.option('-n2', '--node2', help='Second node')
+def nearest(file_path, file_format, node1, node2):
+    trees = tree_utils.load(file_path, file_format)
+    if trees is not None:
+        for tree in trees:
+            mrca = tree.common_ancestor({"name":node1},{"name":node2})
+            mrca.color = "salmon"
+            Phylo.draw(tree)
+    
+    
 @cli.command()
 @click.option('-i', '--file-path', help='File with phylo trees to parse')
 @click.option('-f', '--file-format', help='Phylo tree file format', default='newick')
