@@ -8,6 +8,7 @@ from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio import AlignIO
 import dendropy
 from dendropy import treecalc
+from dendropy.calculate import treecompare
 from Bio.PDB import *
 import sys
 
@@ -102,7 +103,17 @@ def nearest(file_path, file_format, file_path2):
 @click.option('-f', '--file-format', help='Phylo tree file format', default='newick')
 @click.option('-i2', '--file-path2', help='File with phylo trees to parse')
 def distance(file_path, file_format, file_path2):
-    print("jeszcze nic")
-
+    taxon_namespace = dendropy.TaxonNamespace()
+    tree1 = dendropy.Tree.get_from_path(file_path, file_format,taxon_namespace=taxon_namespace)
+    tree2 = dendropy.Tree.get_from_path(file_path2, file_format,taxon_namespace=taxon_namespace)
+    sym_diff = treecompare.symmetric_difference(tree1, tree2)
+    euc_dis = treecompare.euclidean_distance(tree1, tree2)
+    false_pos = treecompare.false_positives_and_negatives(tree1,tree2)
+    robinson_dis = treecompare.robinson_foulds_distance(tree1,tree2)
+    print("Symetric difference: ",sym_diff)
+    print("Robinson Foulds distance: ",robinson_dis)
+    print("False positives and negatives: ",false_pos)
+    print("Euclidean distance: ",euc_dis)
+    
 if __name__ == '__main__':
     cli()
