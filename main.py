@@ -80,7 +80,6 @@ def nearest(file_path, file_format, node1, node2):
             mrca.color = "salmon"
             Phylo.draw(tree)
 
-
 @cli.command()
 @click.option('-i', '--file-path', help='File with phylo trees to parse')
 @click.option('-f', '--file-format', help='Phylo tree file format', default='newick')
