@@ -1,0 +1,5 @@
+sudo python main.py display -i sample.dnd
+python main.py consensus -i sample.dnd -a 'majority'
+sudo python main.py nearest -i t2.phyloxml -f phyloxml --node1 cat --node2 seal
+python main.py distance -i dist1.newick -i2 dist2.newick
+python main.py dna -i msa.phy

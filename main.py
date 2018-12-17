@@ -115,7 +115,7 @@ def dna(file_path, file_format, algorithm):
 
     # Print the distance Matrix
     print('\nDistance Matrix\n===================')
-    print(dm)
+    print(calculator)
 
     # Construct the phylogenetic tree using choosen algorithm
     constructor = DistanceTreeConstructor()
